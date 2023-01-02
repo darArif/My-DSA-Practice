@@ -12,18 +12,20 @@ void printSubs(vector<T> &subs)
 }
 
 template<class T>
-void subSeq(int size, T arr[], int indx, vector<T> &subs, int givenSum)
+int subSeq(int size, T arr[], int indx, vector<T> &subs, int givenSum)
 {
     static int sum = 0;
+    static int count = 0;
 
     if(indx==size) //including empty subsequences as well
     {
         if(sum == givenSum)
         {
             printSubs<T>(subs);
-            
+            return count++;
         }
-        return;
+        else 
+            return count;
     }
 
     subs.push_back(arr[indx]);
@@ -35,6 +37,8 @@ void subSeq(int size, T arr[], int indx, vector<T> &subs, int givenSum)
     sum -= arr[indx];
 
     subSeq(size, arr, indx+1, subs, givenSum);
+
+    return count;
 }
 
 int main()
@@ -43,7 +47,9 @@ int main()
 
     vector<int> subs;
 
-    subSeq<int>(10, arr, 0, subs, 5);
+    int countt = subSeq<int>(10, arr, 0, subs, 5);
+
+    cout<<"\n\nCount="<<countt<<endl;
 
     return 0;
 }
