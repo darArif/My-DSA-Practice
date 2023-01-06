@@ -4,48 +4,38 @@ using namespace std;
 vector<vector<int>> &combs(
     int size,
     int arrIndx,
-    int combIndx,
     int remSum,
     vector<int> &arr,
     vector<int> &v,
-    vector<vector<int>> &V,
-    int map[])
+    vector<vector<int>> &V)
 {
-    map[arr[arrIndx]] = 1;
     if(remSum == 0)
     {
         V.push_back(v);
         return V;
     }
-    if(arrIndx >= size || remSum < 0)
-        return V;
-
-    v.push_back(arr[arrIndx]);
-
-
-    combs(size, arrIndx+1, combIndx+1, remSum-arr[arrIndx], arr, v, V, map);
-
-    v.pop_back();
-
-    v.push_back(arr[arrIndx+1]);
-
-    
-        if(map[arr[arrIndx+1]] == 0)
-            combs(size, arrIndx+1, combIndx, remSum-arr[arrIndx+1], arr, v, V, map);
-    
-
+    for(int i=arrIndx; i<size; i++)
+    {
+        if(i>arrIndx && arr[i]==arr[i-1])  //Since the array has been already sorted
+            continue;
+        if(arr[i]>remSum)
+            break;
+        v.push_back(arr[i]);
+        combs(size, i+1, remSum-arr[i],arr, v, V);
+        v.pop_back();
+    }
     return V;
 }
 
 int main()
 {
-    vector<int> arr = {10, 1, 2, 7, 6, 1, 5};
+    vector<int> arr = {1, 2, 3, 6, 3, 4, 1, 5, 6};
     sort(arr.begin(), arr.end());
     vector<int> v;
     vector<vector<int>> V;
-    int map[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    int targetSum = 8;
-    vector<vector<int>> rV = combs(7, 0, 0, targetSum, arr, v, V, map);
+    
+    int targetSum = 6;
+    vector<vector<int>> rV = combs(9, 0, targetSum, arr, v, V);
 
     for(auto i=rV.begin(); i!=rV.end(); i++)
     {
